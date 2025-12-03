@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dhan-Varsha DVS App</title>
+    
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#0d47a1">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+        /* style.css - Complete Premium Look with Sidebar */
+
+        /* General Styles */
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f7fa; 
+            color: #333;
+            min-height: 100vh;
+        }
+        header {
+            background-color: #0d47a1; 
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); 
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            border-radius: 0;
+        }
+        header h1 { margin: 0; font-size: 1.8em; }
+
+        /* Login Page Styles */
+        #login-page {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #1e3a8a;
+            color: white;
+            text-align: center;
+        }
+        .login-box {
+            background: white;
+            color: #333;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            width: 90%;
+            max-width: 400px;
+        }
+        .login-box h2 {
+            color: #0d47a1;
+            margin-bottom: 25px;
+        }
+        #video-feed {
+            width: 100%;
+            max-width: 300px;
+            height: 200px;
+            background: #ccc;
+            margin: 20px auto;
+            border-radius: 10px;
+            transform: scaleX(-1); /* Mirror effect for selfie view */
+            object-fit: cover;
+        }
+        #login-btn {
+            background-color: #388e3c;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 15px;
+        }
+        #login-status {
+            margin-top: 15px;
+            font-weight: bold;
+        }
+        .login-box input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            box-sizing: border-box;
+            margin-bottom: 15px;
+            font-size: 1em;
+        }
+
+        /* ------------------- DASHBOARD LAYOUT (Existing CSS below) ------------------- */
+        .main-wrapper {
+            display: none; /* Default hide the dashboard */
+            padding-top: 65px; 
+        }
+        
+        /* Sidebar Styling */
+        #sidebar {
+            min-width: 250px;
+            max-width: 250px;
+            background: #1e3a8a; 
+            color: #fff;
+            transition: all 0.3s;
+            position: fixed;
+            height: 100vh;
+            padding-top: 65px; 
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 900;
+        }
+        .sidebar-header { padding: 20px; background: #0d47a1; }
+        .sidebar-header h3 { margin: 0; font-size: 1.5em; font-weight: 700; }
+        #sidebar ul.components { padding: 20px 0; border-bottom: 1px solid #2e59a4; }
+        #sidebar ul p { color: #b3cde0; padding: 10px 20px; text-transform: uppercase; font-size: 0.85em; font-weight: 600; }
+        #sidebar ul li a { padding: 10px 20px; font-size: 1.1em; display: block; color: #fff; text-decoration: none; transition: all 0.3s; }
+        #sidebar ul li a:hover { color: #ffb300; background: #1c3374; }
+        #sidebar ul li.active > a, a[aria-expanded="true"] { color: #fff; background: #0d47a1; border-left: 5px solid #ffb300; }
+        #sidebar .fas { margin-right: 10px; width: 20px; text-align: center; }
+        #forms-submenu li a { padding-left: 40px; background: #1c3374; font-size: 1em; }
+        #forms-submenu li a:hover { background: #0d47a1; }
+        .deactivate-link { color: #f44336 !important; }
+        .deactivate-link:hover { color: #ffb300 !important; }
+        .sidebar-footer { padding: 20px; border-top: 1px solid #2e59a4; position: absolute; bottom: 0; width: 100%; }
+        .sidebar-footer a { color: #fff; text-decoration: none; display: block; padding: 5px 0; }
+        .sidebar-footer a:hover { color: #ffb300; }
+
+
+        /* Content Area */
+        #content {
+            width: 100%;
+            padding: 20px;
+            min-height: 100vh;
+            transition: all 0.3s;
+            margin-left: 250px; 
+        }
+        .container-fluid {
+            width: 98%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* --- Dashboard Cards (Metrics) --- */
+        .dashboard-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
+            text-align: center;
+            border-left: 5px solid #ffb300; 
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); 
+        }
+        .card h3 { color: #0d47a1; font-size: 1em; font-weight: 600; }
+        .card .value { font-size: 2.5em; font-weight: 800; color: #ffb300; display: block; }
+
+        /* --- Forms and Inputs --- */
+        .form-section {
+            background-color: white;
+            padding: 35px;
+            border-radius: 10px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15); 
+            margin-top: 35px;
+            border-top: 3px solid #ffb300;
+        }
+        .form-section h2 { border-bottom: 2px solid #e0e0e0; padding-bottom: 15px; color: #0d47a1; font-weight: 600; }
+        .form-group { margin-bottom: 25px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #444; }
+        .form-group input:not([type="submit"]),
+        .form-group textarea,
+        .form-group select {
+            width: 100%; padding: 14px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; font-size: 1em; transition: border-color 0.3s;
+        }
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+            border-color: #ffb300; box-shadow: 0 0 0 3px rgba(255, 179, 0, 0.3); outline: none;
+        }
+        .form-submit-btn { background-color: #388e3c; color: white; padding: 16px 30px; border: none; border-radius: 8px; cursor: pointer; font-size: 1.1em; font-weight: bold; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
+        .form-submit-btn:hover { background-color: #2e7d32; }
+        .deactivate-btn { background-color: #e53935 !important; }
+
+        /* --- Table Styling --- */
+        .customer-table {
+            width: 100%; border-collapse: collapse; margin-top: 25px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); border-radius: 8px; overflow: hidden; 
+        }
+        .customer-table th, .customer-table td { border: 1px solid #f0f0f0; padding: 15px; text-align: left; font-size: 0.95em; }
+        .customer-table th { background-color: #1565c0; color: white; font-weight: 600; text-transform: uppercase; }
+        .customer-table tr:nth-child(even) { background-color: #f9f9f9; }
+        .customer-table tr:hover { background-color: #e3f2fd; }
+        .edit-btn { background-color: #ffb300; color: #333; padding: 8px 15px; border: none; border-radius: 6px; cursor: pointer; font-size: 0.9em; font-weight: bold; }
+        .edit-btn:hover { background-color: #ffa000; }
+
+        /* Media Queries for Responsiveness */
+        @media (max-width: 768px) {
+            #sidebar { min-width: 80px; max-width: 80px; text-align: center; }
+            #sidebar ul li a { padding: 10px 0; font-size: 0.9em; }
+            #sidebar .fas { margin-right: 0; display: block; margin-bottom: 5px; }
+            .sidebar-header h3, #sidebar ul p, .sidebar-footer a { display: none; }
+            #content { margin-left: 80px; }
+            .dashboard-summary { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="login-page">
+    <div class="login-box">
+        <h2>🔒 एडमिन लॉग इन</h2>
+        <p id="login-status"><i class="fas fa-camera"></i> कैमरा शुरू हो रहा है...</p>
+        
+        <video id="video-feed" autoplay muted></video>
+
+        <form id="auth-form">
+            <input type="password" id="auth-password" placeholder="प्रशासक पासवर्ड" required>
+            <button type="submit" id="login-btn" disabled>
+                <i class="fas fa-lock-open"></i> Face Lock और लॉग इन करें
+            </button>
+        </form>
+    </div>
+</div>
+
+<header style="display:none;" id="main-header">
+    <h1>🌧️ धन-वर्षा बचत समूह - एडमिन डैशबोर्ड 💰</h1>
+</header>
+
+<div class="main-wrapper" id="main-dashboard-wrapper">
+    
+    <nav id="sidebar">
+        <div class="sidebar-header">
+            <h3>Dhan-Varsha DVS</h3>
+        </div>
+        <ul class="list-unstyled components">
+            <p>मुख्य मेन्यू</p>
+            <li class="active">
+                <a href="#dashboard"><i class="fas fa-chart-line"></i> Dashboard</a>
+            </li>
+            <li>
+                <a href="#forms-menu" data-toggle="collapse" class="dropdown-toggle" onclick="toggleSidebarMenu('forms-submenu')">
+                    <i class="fas fa-file-alt"></i> Forms & Registrations
+                </a>
+                <ul class="collapse list-unstyled" id="forms-submenu">
+                    <li><a href="#" onclick="toggleForm('add_member_form')"><i class="fas fa-user-plus"></i> नया सदस्य जोड़ें</a></li>
+                    <li><a href="#" onclick="toggleForm('add_deposit_form')"><i class="fas fa-wallet"></i> जमा राशि दर्ज करें</a></li>
+                    <li><a href="#" onclick="toggleForm('loan_apply_form')"><i class="fas fa-hand-holding-usd"></i> कर्ज़ आवेदन</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#"><i class="fas fa-users"></i> सदस्य लिस्ट</a>
+            </li>
+            <li>
+                <a href="#" onclick="toggleForm('deactivate_member_form')" class="deactivate-link"><i class="fas fa-user-times"></i> अकाउंट बंद करें</a>
+            </li>
+        </ul>
+        <div class="sidebar-footer">
+            <a href="#" onclick="toggleForm('change_password_form')"><i class="fas fa-key"></i> Password बदलें</a>
+            <a href="#" onclick="logout()"><i class="fas fa-power-off"></i> Logout</a>
+        </div>
+    </nav>
+    
+    <div id="content" class="content-area">
+        <div class="container-fluid">
+            
+            <h2>📊 मुख्य अवलोकन (Dashboard Summary)</h2>
+            <p><em>(In sankhyaon ko automatic update karne ke liye database aur server-side code ki zaroorat padegi.)</em></p>
+            <div class="dashboard-summary">
+                <div class="card"><h3>कुल सदस्य</h3><div class="value" id="total_members">0</div></div>
+                <div class="card"><h3>कुल जमा राशि</h3><div class="value" id="total_deposit">₹ 0.00</div></div>
+                <div class="card"><h3>कुल क़र्ज़ राशि</h3><div class="value" id="total_loan">₹ 0.00</div></div>
+                <div class="card"><h3>शेष राशि (नेट बैलेंस)</h3><div class="value" id="remaining_balance">₹ 0.00</div></div>
+                <div class="card"><h3>जमा करने वाले सदस्य</h3><div class="value" id="depositing_members">0</div></div>
+                <div class="card"><h3>कर्ज लेने वाले सदस्य</h3><div class="value" id="loan_members">0</div></div>
+            </div>
+
+            <div id="change_password_form" class="form-section" style="display:none;">
+                <h2>🔑 Password बदलें</h2>
+                <p><em>(आपका पासवर्ड सिर्फ आपके ब्राउज़र में सुरक्षित है, किसी सर्वर पर नहीं।)</em></p>
+                <form id="change_password_form_submit">
+                    <div class="form-group"><label for="current_password">पुराना पासवर्ड</label><input type="password" id="current_password" name="current_password" required></div>
+                    <div class="form-group"><label for="new_password">नया पासवर्ड</label><input type="password" id="new_password" name="new_password" required></div>
+                    <div class="form-group"><label for="confirm_password">नया पासवर्ड कन्फर्म करें</label><input type="password" id="confirm_password" name="confirm_password" required></div>
+                    <button type="submit" class="form-submit-btn" style="background-color: #ffb300;">✅ पासवर्ड सुरक्षित करें</button>
+                </form>
+            </div>
+            
+            <div id="add_member_form" class="form-section" style="display:none;">
+                <h2>👤 नया सदस्य जोड़ें (New Member Registration)</h2>
+                <form id="new_member_form">
+                    <h3>व्यक्तिगत जानकारी</h3>
+                    <div class="form-group"><label for="m_name">नाम</label><input type="text" id="m_name" name="name" required></div>
+                    <div class="form-group"><label for="m_mobile">मोबाइल नंबर</label><input type="tel" id="m_mobile" name="mobile" required></div>
+                    <div class="form-group"><label for="m_photo">फोटो (Camera/Gallery)</label><input type="file" id="m_photo" name="photo" accept="image/*" required></div>
+                    <div class="form-group"><label for="m_sign">हस्ताक्षर (Sign) **</label><input type="file" id="m_sign" name="sign" accept="image/*" required></div>
+                    <h3>पहचान दस्तावेज़</h3>
+                    <div class="form-group"><label for="m_aadhaar">आधार नंबर</label><input type="text" id="m_aadhaar" name="aadhaar" required></div>
+                    <div class="form-group"><label for="m_aadhaar_front">आधार कार्ड फोटो (सामने)</label><input type="file" id="m_aadhaar_front" name="aadhaar_front" accept="image/*" required></div>
+                    <div class="form-group"><label for="m_aadhaar_back">आधार कार्ड फोटो (पीछे)</label><input type="file" id="m_aadhaar_back" name="aadhaar_back" accept="image/*" required></div>
+                    <div class="form-group"><label for="m_pan">पैन नंबर</label><input type="text" id="m_pan" name="pan"></div>
+                    <div class="form-group"><label for="m_pan_img">पैन कार्ड फोटो</label><input type="file" id="m_pan_img" name="pan_img" accept="image/*"></div>
+                    <h3>बैंक विवरण</h3>
+                    <div class="form-group"><label for="m_bank_details">बैंक विवरण</label><input type="text" id="m_bank_details" name="bank_details" placeholder="A/C No., IFSC, Bank Name"></div>
+                    <div class="form-group"><label for="m_bank_img">पासबुक/चेक फोटो</label><input type="file" id="m_bank_img" name="bank_img" accept="image/*"></div>
+                    <h3>आवेदन का प्रकार</h3>
+                    <div class="form-group">
+                        <label for="m_application_type">आप किस चीज़ के लिए आवेदन कर रहे हैं?</label>
+                        <select id="m_application_type" name="application_type" onchange="toggleLoanFields(this.value)">
+                            <option value="deposit">जमा (Deposit) करने के लिए</option>
+                            <option value="loan">क़र्ज़ (Loan) लेने के लिए</option>
+                        </select>
+                    </div>
+                    <div id="loan_fields_new_member" style="display:none; border: 1px solid #ffb300; padding: 15px; border-radius: 5px; margin-top: 10px;">
+                        <h4>क़र्ज़ विवरण (Loan Details)</h4>
+                        <div class="form-group"><label for="m_loan_amount">कितना क़र्ज़ लेंगे?</label><input type="number" id="m_loan_amount" name="loan_amount" min="1000" max="4000"></div>
+                        <div class="form-group"><label for="m_loan_repayment">कब तक वापस देंगे?</label><input type="text" id="m_loan_repayment" name="loan_repayment" placeholder="e.g., 3 mahine, 6 mahine"></div>
+                        <div class="form-group"><label for="m_loan_reason">क़र्ज़ क्यों ले रहे हैं?</label><textarea id="m_loan_reason" name="loan_reason" rows="3"></textarea></div>
+                    </div>
+                    <button type="submit" class="form-submit-btn">✅ सदस्य जोड़ें और डेटा सुरक्षित करें</button>
+                </form>
+            </div>
+            
+            <div id="add_deposit_form" class="form-section" style="display:none;">
+                <h2>💵 जमा राशि दर्ज करें (Add Deposit)</h2>
+                <form id="add_deposit_form_submit">
+                    <div class="form-group"><label for="d_member_select">सदस्य चुनें</label><select id="d_member_select" name="member_id" required><option value="">-- सदस्य ID/नाम चुनें --</option><option value="M1001">M1001 - Ravi Kishan</option><option value="M1002">M1002 - Archana Devi</option></select></div>
+                    <div class="form-group"><label for="d_amount">जमा राशि</label><input type="number" id="d_amount" name="amount" min="1000" required></div>
+                    <div class="form-group"><label for="d_payment_method">भुगतान का तरीका</label><select id="d_payment_method" name="payment_method" onchange="toggleReceiptField(this.value)" required><option value="offline">Offline (Cash)</option><option value="online">Online (UPI/Bank Transfer)</option></select></div>
+                    <div class="form-group" id="receipt_field" style="display:none;"><label for="d_receipt">ऑनलाइन रसीद/स्क्रीनशॉट (Receipt)</label><input type="file" id="d_receipt" name="receipt" accept="image/*, application/pdf"></div>
+                    <button type="submit" class="form-submit-btn">➕ जमा राशि सुरक्षित करें</button>
+                </form>
+            </div>
+            
+            <div id="loan_apply_form" class="form-section" style="display:none;">
+                <h2>💸 कर्ज़ आवेदन दर्ज करें (Existing Member Loan)</h2>
+                <form id="loan_apply_form_submit">
+                    <div class="form-group"><label for="l_member_select">सदस्य चुनें</label><select id="l_member_select" name="member_id" required><option value="">-- सदस्य ID/नाम चुनें --</option><option value="M1001">M1001 - Ravi Kishan</option><option value="M1002">M1002 - Archana Devi</option></select></div>
+                    <div class="form-group"><label for="l_sign">हस्ताक्षर (Sign)</label><input type="file" id="l_sign" name="sign" accept="image/*" required></div>
+                    <div class="form-group"><label for="l_amount">कर्ज़ राशि</label><input type="number" id="l_amount" name="amount" min="1000" max="4000" required></div>
+                    <div class="form-group"><label for="l_repayment">कब तक वापस देंगे?</label><input type="text" id="l_repayment" name="repayment" required placeholder="e.g., 3 mahine, 6 mahine"></div>
+                    <div class="form-group"><label for="l_reason">क़र्ज़ क्यों ले रहे हैं?</label><textarea id="l_reason" name="reason" rows="3" required></textarea></div>
+                    <button type="submit" class="form-submit-btn" style="background-color: #ffb300;">💰 कर्ज़ आवेदन जमा करें</button>
+                </form>
+            </div>
+            
+            <div id="deactivate_member_form" class="form-section" style="display:none;">
+                <h2>❌ सदस्य अकाउंट बंद करें (Deactivate Account)</h2>
+                <form id="deactivate_member_form_submit">
+                    <div class="form-group"><label for="deact_member_select">सदस्य चुनें</label><select id="deact_member_select" name="member_id" required><option value="">-- सदस्य ID/नाम चुनें --</option><option value="M1001">M1001 - Ravi Kishan</option><option value="M1002">M1002 - Archana Devi</option></select></div>
+                    <div class="form-group"><label for="deact_reason">अकाउंट बंद करने का कारण</label><textarea id="deact_reason" name="reason" rows="3" required></textarea></div>
+                    <button type="submit" class="form-submit-btn deactivate-btn">अकाउंट बंद करें</button>
+                </form>
+            </div>
+
+
+            <h2>📋 सभी सदस्य विवरण (All Customer Details)</h2>
+            <table class="customer-table">
+                <thead><tr><th>ID</th><th>नाम</th><th>मोबाइल</th><th>कुल जमा</th><th>कुल क़र्ज़</th><th>स्थिति</th><th>कार्य</th></tr></thead>
+                <tbody>
+                    <tr><td>DV1001</td><td>रवि किशन</td><td>7808215820</td><td>₹ 5000</td><td>₹ 0</td><td>Active</td><td><button class="edit-btn">Edit</button></td></tr>
+                    <tr><td>DV1002</td><td>अर्चना देवी</td><td>7764970580</td><td>₹ 10000</td><td>₹ 4000</td><td>Active</td><td><button class="edit-btn">Edit</button></td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Server URL (Render URL)
+    const RENDER_URL = "https://dvs-admin-server.onrender.com"; // **<-- RENDER SERVER KA CORRECT LIVE URL**
+    // Key for storing password in browser storage
+    const PASSWORD_KEY = 'dvs_admin_password';
+
+    // Default password for first time use
+    const DEFAULT_PASSWORD = "7808215820"; 
+
+
+    // --- Face Lock/Login Logic ---
+    const video = document.getElementById('video-feed');
+    const loginStatus = document.getElementById('login-status');
+    const loginBtn = document.getElementById('login-btn');
+    const loginPage = document.getElementById('login-page');
+    const mainHeader = document.getElementById('main-header');
+    const dashboardWrapper = document.getElementById('main-dashboard-wrapper');
+    const authForm = document.getElementById('auth-form');
+
+    let stream; 
+
+    // Function to get the current password (from localStorage or default)
+    function getCurrentPassword() {
+        return localStorage.getItem(PASSWORD_KEY) || DEFAULT_PASSWORD;
+    }
+
+    // Camera Access Start
+    async function startCamera() {
+        try {
+            // Mobile (front) camera access
+            stream = await navigator.mediaDevices.getUserMedia({ 
+                video: { facingMode: "user" } 
+            });
+            video.srcObject = stream;
+            loginStatus.innerHTML = '<i class="fas fa-check-circle"></i> कैमरा तैयार। पासवर्ड दर्ज करें।';
+            loginBtn.disabled = false;
+        } catch (err) {
+            loginStatus.innerHTML = `<i class="fas fa-times-circle"></i> कैमरा एक्सेस नहीं मिला।: ${err.name}`;
+            // If the error is NotAllowedError (like when run locally), give password access anyway
+            if (err.name === 'NotAllowedError' || err.name === 'SecurityError') {
+                 loginStatus.innerHTML = '<i class="fas fa-exclamation-triangle"></i> कैमरा ब्लॉक। सिर्फ पासवर्ड से लॉग इन करें।';
+                 loginBtn.disabled = false; // Allow password login fallback
+            }
+        }
+    }
+
+    // Stop camera when not needed (for privacy)
+    function stopCamera() {
+        if (stream) {
+            stream.getTracks().forEach(track => track.stop());
+            video.srcObject = null;
+        }
+    }
+
+    // Login/Face Lock attempt
+    authForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const password = document.getElementById('auth-password').value;
+        const correctPassword = getCurrentPassword();
+
+        // **Password Check**
+        if (password === correctPassword) { 
+            // Simulate Face Match success
+            loginStatus.innerHTML = '<i class="fas fa-lock-open"></i> Face/Password Verified! डैशबोर्ड खुल रहा है...';
+            
+            // Wait for visual cue, then transition to dashboard
+            setTimeout(() => {
+                loginPage.style.display = 'none';
+                mainHeader.style.display = 'block';
+                dashboardWrapper.style.display = 'flex';
+                stopCamera(); // Stop camera after successful login
+            }, 1000); 
+
+        } else {
+            loginStatus.style.color = 'red';
+            loginStatus.innerHTML = '<i class="fas fa-exclamation-triangle"></i> पासवर्ड गलत है।';
+            document.getElementById('auth-password').value = '';
+            setTimeout(() => {
+                loginStatus.style.color = 'white';
+                loginStatus.innerHTML = '<i class="fas fa-camera"></i> कैमरा तैयार। पासवर्ड दर्ज करें।';
+            }, 2000);
+        }
+    });
+
+    // Logout Function
+    function logout() {
+        if (confirm("क्या आप लॉग आउट करना चाहते हैं?")) {
+            // Hide dashboard, show login
+            dashboardWrapper.style.display = 'none';
+            mainHeader.style.display = 'none';
+            loginPage.style.display = 'flex';
+            
+            // Clear password and restart camera for next login attempt
+            document.getElementById('auth-password').value = '';
+            loginStatus.style.color = 'white';
+            startCamera();
+        }
+    }
+
+
+    // --- Change Password Logic ---
+    document.getElementById('change_password_form_submit').addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        const currentPassword = document.getElementById('current_password').value;
+        const newPassword = document.getElementById('new_password').value;
+        const confirmPassword = document.getElementById('confirm_password').value;
+        const correctPassword = getCurrentPassword();
+
+        if (currentPassword !== correctPassword) {
+            alert("❌ पुराना पासवर्ड गलत है!");
+            return;
+        }
+
+        if (newPassword !== confirmPassword) {
+            alert("❌ नया पासवर्ड और कन्फर्म पासवर्ड मेल नहीं खाते!");
+            return;
+        }
+
+        if (newPassword.length < 4) {
+             alert("❌ पासवर्ड कम से कम 4 अक्षरों का होना चाहिए।");
+            return;
+        }
+        
+        // Save new password to browser storage
+        localStorage.setItem(PASSWORD_KEY, newPassword);
+
+        alert("✅ पासवर्ड सफलतापूर्वक बदल दिया गया है! कृपया अगली बार नए पासवर्ड से लॉग इन करें।");
+        
+        // Clear form and hide it
+        document.getElementById('change_password_form_submit').reset();
+        toggleForm('change_password_form');
+    });
+
+
+    // Start camera when the page loads
+    document.addEventListener('DOMContentLoaded', startCamera);
+
+    // --- DASHBOARD FORM LOGIC (Existing code with Timestamp) ---
+
+    // Form Toggle, Sidebar Toggle, and Field Toggle functions 
+    function toggleForm(formId) {
+        // Close all other forms
+        document.querySelectorAll('.form-section').forEach(form => {
+            if (form.id !== formId) { form.style.display = 'none'; }
+        });
+        // Toggle the selected form
+        const form = document.getElementById(formId);
+        if (form) { form.style.display = form.style.display === 'block' ? 'none' : 'block'; }
+    }
+    function toggleSidebarMenu(submenuId) {
+        const submenu = document.getElementById(submenuId);
+        if (submenu) { submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block'; }
+    }
+    function toggleLoanFields(type) {
+        const loanFieldsDiv = document.getElementById('loan_fields_new_member');
+        const requiredLoanFields = [document.getElementById('m_loan_amount'), document.getElementById('m_loan_repayment'), document.getElementById('m_loan_reason')];
+        loanFieldsDiv.style.display = type === 'loan' ? 'block' : 'none';
+        requiredLoanFields.forEach(field => { if (field) field.required = (type === 'loan'); });
+    }
+    function toggleReceiptField(method) {
+        const receiptFieldDiv = document.getElementById('receipt_field');
+        const receiptInput = document.getElementById('d_receipt');
+        receiptFieldDiv.style.display = method === 'online' ? 'block' : 'none';
+        if (receiptInput) receiptInput.required = (method === 'online');
+    }
+
+
+    // **Server Communication Logic with Timestamp**
+    async function handleSubmit(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(this);
+        const data = Object.fromEntries(formData.entries());
+
+        // Timestamp add karna
+        data.timestamp = new Date().toISOString(); 
+        
+        // Endpoint define karna
+        let endpoint; 
+        if (this.id === 'new_member_form') endpoint = '/submit_member';
+        else if (this.id === 'add_deposit_form_submit') endpoint = '/submit_deposit';
+        else if (this.id === 'loan_apply_form_submit') endpoint = '/submit_loan';
+        else if (this.id === 'deactivate_member_form_submit') endpoint = '/deactivate_member';
+
+        try {
+            // fetch call - RENDER_URL is defined above
+            const response = await fetch(`${RENDER_URL}${endpoint}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                alert(`✅ सफलता! Server Response: ${result.message}\nTimestamp: ${data.timestamp}`);
+                this.reset();
+                toggleForm(this.id);
+            } else {
+                alert(`❌ Error: Server ne yeh error bheja: ${result.error}`);
+            }
+
+        } catch (error) {
+            console.error('Network or Server Error:', error);
+            alert('❌ Error: Server se connect nahi ho pa raha hai. Server URL sahi hai?');
+        }
+    }
+
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // Sabhi forms par submit event listener lagao
+        document.querySelectorAll('form').forEach(form => {
+            if (form.id !== 'auth-form' && form.id !== 'change_password_form_submit') { 
+                form.addEventListener('submit', handleSubmit);
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
